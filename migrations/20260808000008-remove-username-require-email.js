@@ -3,7 +3,10 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.removeColumn('users', 'username');
+    const table = await queryInterface.describeTable('users');
+    if (table.username) {
+      await queryInterface.removeColumn('users', 'username');
+    }
 
     await queryInterface.sequelize.query(
       'DELETE FROM users WHERE email IS NULL;'

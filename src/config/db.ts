@@ -5,6 +5,11 @@ import { initModels } from "../models";
 export const sequelize = new Sequelize(env.DATABASE_URL, {
   dialect: "postgres",
   logging: env.NODE_ENV === "development" ? false : false,
+  ...(env.NODE_ENV === "production" && {
+    dialectOptions: {
+      ssl: { require: true, rejectUnauthorized: false },
+    },
+  }),
   pool: {
     max: 10,
     min: 0,
